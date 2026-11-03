@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" translate="no">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="You're invited to join 5th Anniversary of Tlaga Singha." />
+	<title>5th Anniversary of Tlaga Singha</title>
+	
+	<meta property="og:title" content="5th Anniversary of Tlaga Singha" />
+	<meta property="og:type" content="Website" />
+	<meta property="og:image" content="assets/img/logo.png" />
+	<meta property="og:url" content="" />
+	<meta property="og:site_name" content="Tlaga Singha Anniversary" />
+	<meta property="og:description" content="You're invited to join 5th Anniversary of Tlaga Singha." />
+	
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Alice&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Alegreya&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Emilys+Candy&family=Homemade+Apple&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+	
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/aos.css" rel="stylesheet">
+	<link rel="stylesheet" href="assets/css/slick.css">
+	<link rel="stylesheet" href="assets/css/magnific-popup.css">
+	<link rel="stylesheet" href="assets/css/style.css" />
+	
+	<!-- Favicons -->
+	<link href="assets/images/favicon.png" rel="icon">
+    <link href="assets/images/favicon.png" rel="apple-touch-icon">
+	
+	<script>
+		// Get URL parameters
+		// function getUrlParameter(name) {
+		// 	name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+		// 	var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+		// 	var results = regex.exec(location.search);
+		// 	return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+		// }
+		function getUrlParameter(name) {
+			const params = new URLSearchParams(window.location.search);
+			return params.get(name) || '';
+		}
+		
+		// Populate recipient name from URL
+		// $(document).ready(function() {
+		// 	var namaPenerima = getUrlParameter('untuk');
+		// 	var validFor = getUrlParameter('validfor') || '1 person';
+			
+		// 	if(namaPenerima) {
+		// 		$('.modal-penerima').text(namaPenerima);
+		// 		$('#nama-penerima').text('Dear ' + namaPenerima);
+		// 		$('#nama').val(namaPenerima);
+		// 		$('#validfor').val(validFor);
+		// 		$('#valid-for-text').text('Valid for: ' + validFor);
+		// 		$('.paragraph-modal').last().text('(Valid for: ' + validFor + ')');
+		// 	} else {
+		// 		$('.modal-penerima').text('Guest');
+		// 		$('#nama-penerima').text('Dear Guest');
+		// 		$('#nama').val('');
+		// 		$('#valid-for-text').text('Valid for: 1 person');
+		// 	}
+		// });
+		$(document).ready(function() {
+
+			var namaPenerima = getUrlParameter('untuk') || 'Guest';
+			var validFor = getUrlParameter('validfor') || '1 person';
+
+			// Tampilkan nama penerima
+			$('.modal-penerima').text(namaPenerima);
+
+			$('#nama-penerima').text('Dear ' + namaPenerima);
+
+			$('#nama').val(namaPenerima);
+
+			// Tampilkan jumlah tamu
+			$('#validfor').val(validFor);
+
+			$('#valid-for-text').text('Valid for: ' + validFor);
+
+			$('.paragraph-modal').last().text('(Valid for: ' + validFor + ')');
+
+		});
+		
+		function SubForm (){
+		    
+		    var nama = $('#nama').val();
+    		var hadir = $("input[type='radio'][name='kehadiran']:checked").val();
+    		var ucapan = $("#ucapan").val();
+            var validfor = $("#validfor").val();
+    		
+    		if(nama.trim() !== "" && hadir){
+                $("#butsave").prop("disabled", true);
+                $("#showLoading").show();
+                
+                // Simulate delay
+                setTimeout(function() {
+                    // Save to localStorage
+                    var messages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
+                    messages.unshift({
+                        nama: nama,
+                        hadir: hadir,
+                        ucapan: ucapan,
+                        validfor: validfor,
+                        date: new Date().toISOString()
+                    });
+                    localStorage.setItem('rsvpMessages', JSON.stringify(messages));
+                    
+                    $("#butsave").removeAttr("disabled");
+                    $('#showNotif').html('Your RSVP has been sent successfully.');
+                    $('#rsvp-form')[0].reset();
+                    $('#showNotif').fadeIn('slow');
+                    setTimeout(function() {                        
+                        $('#showNotif').fadeOut('slow');
+                    }, 3000);
+                    
+                    // Refresh the message list
+                    loadMessages();
+                    $("#showLoading").hide();
+                    $("#butsave").prop("disabled", false);
+                }, 800);
+    		} else {
+    		    $('#showError').html('Please complete your data');
+                $('#showError').fadeIn('slow');
+                setTimeout(function() {                        
+                    $('#showError').fadeOut('slow');
+                }, 2000);
+    		}
+		}
+		
+		function loadMessages() {
+		    var messages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
+		    var html = '';
+		    
+		    messages.slice(0, 10).forEach(function(msg) {
+		        var badge = msg.hadir === 'Hadir' 
+		            ? '<span class="badge badge-success">Attending</span>' 
+		            : '<span class="badge badge-secondary">Not Attending</span>';
+		        
+		        html += '<div class="komentar-item">';
+		        html += '<div class="komentar-header"><strong>' + msg.nama + '</strong> ' + badge + '</div>';
+		        if(msg.ucapan) {
+		            html += '<div class="komentar-body">' + msg.ucapan + '</div>';
+		        }
+		        html += '</div>';
+		    });
+		    
+		    if(html === '') {
+		        html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
+		    }
+		    
+		    $("#list-ucapan").html(html);
+		}
+	</script>
+</head>
+
+<body>
+    
+    <div class="modal-top">
+		<img src="assets/img/modal-top.png">
+	</div>
+	<div class="modal-bottom">
+		<img src="assets/img/modal-bottom.png">
+	</div>
+	
+	<!-- MUSIC -->
+	<div id="buttonmusic" class="shadow"><ion-icon name="volume-high-outline"></ion-icon></div>
+	<audio id="player">
+		<source src="https://udbdata.com/music/aurora-runaway.mp3" type="audio/mpeg">
+	</audio>
+	<!-- MUSIC END -->
+	<!-- INVITATION MODAL -->
+	<div class="modal fade in" id="modal_undangan" tabindex="-1" role="dialog" aria-hidden="true" style="display: block;" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog" role="document">
+	        <div class="overlay"></div>
+	        <div class="modal-top">
+    			<img src="assets/img/modal-top.png">
+    		</div>
+    		<div class="modal-bottom">
+    			<img src="assets/img/modal-bottom.png">
+    		</div>
+			<div class="modal-content">
+				<div class="modal-body text-center">
+				    <div data-aos="fade-up">
+						<img style="width: 180px;" src="assets/img/logo.png" />
+            		</div>
+				    <h2 class="section-title text-center" data-aos="fade-up">You're invited to</h2>
+				    <div data-aos="fade-up">
+						<img style="width: 280px;" src="assets/img/glory.png" />
+            		</div>
+					<p class="paragraph-modal" data-aos="fade-up">Dear</p>
+					<h2 class="modal-penerima" data-aos="fade-up">Guest</h2>
+                    <p class="paragraph-modal" data-aos="fade-up" style="margin-bottom: 12px;font-size: 17px;">(Valid for: 1 person)</p>
+					<button type="button" class="btn btn-default btn-modal" id="button-modal" data-aos="fade-up" data-dismiss="modal">Open Invitation</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- MODAL END -->
+	<!-- INTRODUCTION -->
+	<section class="intro" id="intro">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-10 offset-md-1 text-center">
+				    <div>
+						<img style="width: 180px;" src="assets/img/logo.png" />
+            		</div>
+				    <h2 class="section-title text-center">You're invited to</h2>
+				    <div>
+						<img style="width: 280px;margin-bottom: 20px;" src="assets/img/glory.png" />
+            		</div>
+				    <p>You are cordially invited to join us for<br>Tlaga Singha 5th Anniversary Celebration</p>
+				    <p>Wednesday, 21st October 2026<br>5.00 PM</p>
+				    <p id="nama-penerima">Dear Guest</p>
+                    <p id="valid-for-text">Valid for: 1 person</p>
+				    
+				    <!--<div class="event-date">
+
+                        <div class="date-side" data-aos="fade-up">
+                            <span class="line"></span>
+                            <p>SATURDAY</p>
+                            <span class="line"></span>
+                        </div>
+                    
+                        <div class="date-center" data-aos="fade-up">
+                            <div class="month">DEC</div>
+                            <div class="day">31</div>
+                            <div class="year">2026</div>
+                        </div>
+                    
+                        <div class="date-side" data-aos="fade-up">
+                            <span class="line"></span>
+                            <p>6PM - END</p>
+                            <span class="line"></span>
+                        </div>
+                    
+                    </div>-->
+                    
+					<p class="text-center cmb-2" data-aos="fade-up">Best Regards,</p>
+					<p data-aos="fade-up" data-aos-delay="50">Gede Sudarmadiasa</p>
+					<p data-aos="fade-up" data-aos-delay="50">GENERAL MANAGER</p>
+					
+					<h2 class="section-title text-center cmt-5" data-aos="fade-up">Counting Down</h2>
+					
+					<div class="countdown-list js-countdown clearfix col-md-12" data-date="2026/11/11 17:00">
+        				<div class="counter-list__item" data-aos="flip-up" data-aos-delay="50">
+        					<div class="counter-box">
+            					<div class="counting js-countdown-days">124</div>
+            					<p>Days</p>
+        					</div>
+        				</div>
+        				<div class="counter-list__item" data-aos="flip-up" data-aos-delay="100">
+        				    <div class="counter-box">
+            					<div class="counting js-countdown-hours">20</div>
+            					<p>Hours</p>
+        					</div>
+        				</div>
+        				<div class="counter-list__item" data-aos="flip-up" data-aos-delay="150">
+        					<div class="counter-box">
+            					<div class="counting js-countdown-minutes">30</div>
+            					<p>Minutes</p>
+        					</div>
+        				</div>
+        				<div class="counter-list__item" data-aos="flip-up" data-aos-delay="200">
+        				    <div class="counter-box">
+        					    <div class="counting js-countdown-seconds">50</div>
+        					    <p>Seconds</p>
+    					    </div>
+        				</div>
+        			</div>
+					<!-- COUNTDOWN END -->
+				    
+					<h2 class="section-title text-center cmt-5" data-aos="fade-up">RSVP</h2>
+					<p class="text-center cmb-3" data-aos="fade-up" style="margin-top: -24px;">Kindly Reply</p>
+					<form class="rsvp-form js-form" id="rsvp-form" autocomplete="off">
+						<div class="d-md-flex justify-content-between">
+							<div class="col-sm-12">
+								<div class="rsvp-form-field">
+								    <label for="nama">Name</label>
+                                    <input type="text" name="nama" id="nama" value="" required maxlength="150">
+                                    <input type="hidden" name="validfor" id="validfor" value="1 person">
+								</div>
+								<div class="rsvp-form-field textarea">
+								    <label for="ucapan">Message (optional)</label>
+									<textarea rows="3" name="ucapan" id="ucapan"></textarea>
+								</div>
+								<div class="rsvp-form-field">
+                    
+                                    <label>RSVP</label>
+                                    <div class="radio-wrapper">
+                                        <input type="radio" checked="" id="radio-1" name="kehadiran" value="Hadir" class="kehadiran">
+                                        <label for="radio-1">Attending</label>
+                                        <input type="radio" id="radio-2" name="kehadiran" value="Tidak Hadir" class="kehadiran">
+                                        <label for="radio-2">Not Attending</label>
+                                    </div>
+								</div>
+							</div>
+						</div>
+					</form>
+					<br />
+					<div class="col-md-12">
+						<div style="display:none" id="showLoading" class="text-danger">
+							<img width="40px" src="assets/img/loading.gif" />Sending!</div>
+						<div style="display:none" id="showNotif" class="alert alert-success"></div>
+						<div style="display:none" id="showError" class="alert alert-danger"></div>
+					</div>
+					<button type="button" id="butsave" class="rsvp-form-submit js-submit" onclick="SubForm()">Send RSVP</button>
+					
+        			<div class="row" id="kolom-ucapan">
+                        <div id="list-ucapan" class="list-komentar col-md-10 offset-md-1" data-aos="fade-up">
+                            <!-- Loaded from localStorage -->
+                        </div>
+        			</div>
+					<h2 class="section-title text-center cmt-5" data-aos="fade-up">Gallery</h2>
+				    
+					<div class=" grid" data-aos="fade-up" data-aos-delay="300">
+						<div class="grid-sizer"></div>
+						<div class="gutter-sizer"></div>
+						<div class="grid-item">
+						    <a class="story-popup" href="assets/img/stories/1.jpg"><img src="assets/img/stories/1.jpg" class="stories__img" alt="story1"/></a>
+						</div>
+						<div class="grid-item">
+						    <a class="story-popup" href="assets/img/stories/2.jpg"><img src="assets/img/stories/2.jpg" class="stories__img" alt="story2"/></a>
+						</div>
+					</div>
+					
+				    <div>
+						<img style="width: 200px;margin: 75px 0 55px;" src="assets/img/enliven.png" />
+            		</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- FOOTER END -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-2WM1GQX7QJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-2WM1GQX7QJ');
+</script>
+<script src="assets/js/jquery-3.6.1.min.js"></script>
+<script src="assets/js/smoothscroll.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/jquery.countdown.min.js"></script>
+<script src="assets/js/imagesloaded.pkgd.min.js"></script>
+<script src="assets/js/masonry.pkgd.min.js"></script>
+<script src="assets/js/slick.min.js"></script>
+<script src="assets/js/jquery.magnific-popup.min.js"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="assets/js/aos.js"></script>
+<script src="assets/js/script.js"></script>
+
+<script>
+$(document).ready(function() {
+    const params = new URLSearchParams(window.location.search);
+
+    var namaPenerima = params.get('untuk') || 'Guest';
+    var validFor = params.get('validfor') || '1 person';
+
+    $('.modal-penerima').text(namaPenerima);
+    $('#nama-penerima').text('Dear ' + namaPenerima);
+    $('#nama').val(namaPenerima);
+
+    $('#validfor').val(validFor);
+    $('#valid-for-text').text('Valid for: ' + validFor);
+
+    $('.paragraph-modal').last().text('(Valid for: ' + validFor + ')');
+});
+</script>
+</body>
+</html>
