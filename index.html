@@ -62,26 +62,26 @@
 		// 		$('#valid-for-text').text('Valid for: 1 person');
 		// 	}
 		// });
-		$(document).ready(function() {
+		// $(document).ready(function() {
 
-			var namaPenerima = getUrlParameter('untuk') || 'Guest';
-			var validFor = getUrlParameter('validfor') || '1 person';
+		// 	var namaPenerima = getUrlParameter('untuk') || 'Guest';
+		// 	var validFor = getUrlParameter('validfor') || '1 person';
 
-			// Tampilkan nama penerima
-			$('.modal-penerima').text(namaPenerima);
+		// 	// Tampilkan nama penerima
+		// 	$('.modal-penerima').text(namaPenerima);
 
-			$('#nama-penerima').text('Dear ' + namaPenerima);
+		// 	$('#nama-penerima').text('Dear ' + namaPenerima);
 
-			$('#nama').val(namaPenerima);
+		// 	$('#nama').val(namaPenerima);
 
-			// Tampilkan jumlah tamu
-			$('#validfor').val(validFor);
+		// 	// Tampilkan jumlah tamu
+		// 	$('#validfor').val(validFor);
 
-			$('#valid-for-text').text('Valid for: ' + validFor);
+		// 	$('#valid-for-text').text('Valid for: ' + validFor);
 
-			$('.paragraph-modal').last().text('(Valid for: ' + validFor + ')');
+		// 	$('.paragraph-modal').last().text('(Valid for: ' + validFor + ')');
 
-		});
+		// });
 		
 		// GANTI INI DENGAN URL DARI GOOGLE APPS SCRIPT DEPLOY
 		var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwl-v3vRJjWfRRIt9b0yd_d54tfdzg8-QcOpwHLZM4Gu0M2UmXNKQhgxiSsF9RSxL-1/exec';
@@ -100,6 +100,7 @@
                 $.ajax({
                     url: GOOGLE_SCRIPT_URL,
                     method: 'POST',
+                    contentType: 'text/plain',
                     data: JSON.stringify({
                         nama: nama,
                         kehadiran: hadir,
