@@ -84,8 +84,43 @@
 		// });
 		
 		// GANTI INI DENGAN URL DARI GOOGLE APPS SCRIPT DEPLOY
-		var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwl-v3vRJjWfRRIt9b0yd_d54tfdzg8-QcOpwHLZM4Gu0M2UmXNKQhgxiSsF9RSxL-1/exec';
+		var GOOGLE_SCRIPT_URL = '/api/messages';
 		
+		// function SubForm() {
+		// 	var nama = $('#nama').val();
+		// 	var kehadiran = $('#kehadiran').val();
+		// 	var ucapan = $('#ucapan').val();
+
+		// 	$.ajax({
+		// 		url: '/api/messages',
+		// 		method: 'POST',
+		// 		contentType: 'application/json',
+		// 		dataType: 'json',
+		// 		data: JSON.stringify({
+		// 			nama: nama,
+		// 			kehadiran: kehadiran,
+		// 			ucapan: ucapan
+		// 		}),
+
+		// 		success: function(response) {
+		// 			if (response.success) {
+		// 				alert('Terima kasih, konfirmasi Anda berhasil dikirim!');
+
+		// 				$('#rsvp-form')[0].reset();
+
+		// 				loadMessages();
+		// 			} else {
+		// 				alert('Gagal mengirim RSVP.');
+		// 			}
+		// 		},
+
+		// 		error: function(xhr) {
+		// 			console.error(xhr.responseText);
+		// 			alert('Terjadi kesalahan saat mengirim RSVP.');
+		// 		}
+		// 	});
+		// }
+
 		function SubForm (){
 		    
 		    var nama = $('#nama').val();
@@ -98,9 +133,10 @@
                 $("#showLoading").show();
                 
                 $.ajax({
-                    url: GOOGLE_SCRIPT_URL,
+                    url: '/api/messages',
                     method: 'POST',
-                    contentType: 'text/plain',
+                    contentType: 'application/json',
+					dataType: 'json',
                     data: JSON.stringify({
                         nama: nama,
                         kehadiran: hadir,
@@ -140,7 +176,7 @@
 		
 		function loadMessages() {
 		    $.ajax({
-		        url: GOOGLE_SCRIPT_URL,
+		        url: '/api/messages',
 		        method: 'GET',
 		        dataType: 'json',
 		        success: function(messages) {
