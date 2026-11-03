@@ -83,6 +83,9 @@
 
 		});
 		
+		// GANTI INI DENGAN URL DARI GOOGLE APPS SCRIPT DEPLOY
+		var GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwl-v3vRJjWfRRIt9b0yd_d54tfdzg8-QcOpwHLZM4Gu0M2UmXNKQhgxiSsF9RSxL-1/exec';
+		
 		function SubForm (){
 		    
 		    var nama = $('#nama').val();
@@ -94,32 +97,37 @@
                 $("#butsave").prop("disabled", true);
                 $("#showLoading").show();
                 
-                // Simulate delay
-                setTimeout(function() {
-                    // Save to localStorage
-                    var messages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
-                    messages.unshift({
+                $.ajax({
+                    url: GOOGLE_SCRIPT_URL,
+                    method: 'POST',
+                    data: JSON.stringify({
                         nama: nama,
-                        hadir: hadir,
-                        ucapan: ucapan,
-                        validfor: validfor,
-                        date: new Date().toISOString()
-                    });
-                    localStorage.setItem('rsvpMessages', JSON.stringify(messages));
-                    
-                    $("#butsave").removeAttr("disabled");
-                    $('#showNotif').html('Your RSVP has been sent successfully.');
-                    $('#rsvp-form')[0].reset();
-                    $('#showNotif').fadeIn('slow');
-                    setTimeout(function() {                        
-                        $('#showNotif').fadeOut('slow');
-                    }, 3000);
-                    
-                    // Refresh the message list
-                    loadMessages();
-                    $("#showLoading").hide();
-                    $("#butsave").prop("disabled", false);
-                }, 800);
+                        kehadiran: hadir,
+                        ucapan: ucapan
+                    }),
+                    success: function() {
+                        $("#butsave").removeAttr("disabled");
+                        $('#showNotif').html('Your RSVP has been sent successfully.');
+                        $('#rsvp-form')[0].reset();
+                        $('#showNotif').fadeIn('slow');
+                        setTimeout(function() {                        
+                            $('#showNotif').fadeOut('slow');
+                        }, 3000);
+                        
+                        loadMessages();
+                        $("#showLoading").hide();
+                        $("#butsave").prop("disabled", false);
+                    },
+                    error: function() {
+                        $('#showError').html('Failed to send. Please try again.');
+                        $('#showError').fadeIn('slow');
+                        setTimeout(function() {                        
+                            $('#showError').fadeOut('slow');
+                        }, 2000);
+                        $("#showLoading").hide();
+                        $("#butsave").prop("disabled", false);
+                    }
+                });
     		} else {
     		    $('#showError').html('Please complete your data');
                 $('#showError').fadeIn('slow');
@@ -130,27 +138,37 @@
 		}
 		
 		function loadMessages() {
-		    var messages = JSON.parse(localStorage.getItem('rsvpMessages') || '[]');
-		    var html = '';
-		    
-		    messages.slice(0, 10).forEach(function(msg) {
-		        var badge = msg.hadir === 'Hadir' 
-		            ? '<span class="badge badge-success">Attending</span>' 
-		            : '<span class="badge badge-secondary">Not Attending</span>';
-		        
-		        html += '<div class="komentar-item">';
-		        html += '<div class="komentar-header"><strong>' + msg.nama + '</strong> ' + badge + '</div>';
-		        if(msg.ucapan) {
-		            html += '<div class="komentar-body">' + msg.ucapan + '</div>';
+		    $.ajax({
+		        url: GOOGLE_SCRIPT_URL,
+		        method: 'GET',
+		        dataType: 'json',
+		        success: function(messages) {
+		            var html = '';
+		            
+		            // Newest first, limit 10
+		            messages.reverse().slice(0, 10).forEach(function(msg) {
+		                var badge = msg.kehadiran === 'Hadir' 
+		                    ? '<span class="badge badge-success">Attending</span>' 
+		                    : '<span class="badge badge-secondary">Not Attending</span>';
+		                
+		                html += '<div class="komentar-item">';
+		                html += '<div class="komentar-header"><strong>' + msg.nama + '</strong> ' + badge + '</div>';
+		                if(msg.ucapan) {
+		                    html += '<div class="komentar-body">' + msg.ucapan + '</div>';
+		                }
+		                html += '</div>';
+		            });
+		            
+		            if(html === '') {
+		                html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
+		            }
+		            
+		            $("#list-ucapan").html(html);
+		        },
+		        error: function() {
+		            $("#list-ucapan").html('<p class="text-center text-muted">Unable to load messages.</p>');
 		        }
-		        html += '</div>';
 		    });
-		    
-		    if(html === '') {
-		        html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
-		    }
-		    
-		    $("#list-ucapan").html(html);
 		}
 	</script>
 </head>
