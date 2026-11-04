@@ -174,38 +174,88 @@
     		}
 		}
 		
-		function loadMessages() {
-		    $.ajax({
-		        url: '/api/messages',
-		        method: 'GET',
-		        dataType: 'json',
-		        success: function(messages) {
-		            var html = '';
+		// function loadMessages() {
+		//     $.ajax({
+		//         url: '/api/messages',
+		//         method: 'GET',
+		//         dataType: 'json',
+		//         success: function(messages) {
+		//             var html = '';
 		            
-		            // Newest first, limit 10
-		            messages.reverse().slice(0, 10).forEach(function(msg) {
-		                var badge = msg.kehadiran === 'Hadir' 
+		//             // Newest first, limit 10
+		//             messages.reverse().slice(0, 10).forEach(function(msg) {
+		//                 var badge = msg.kehadiran === 'Hadir' 
+		//                     ? '<span class="badge badge-success">Attending</span>' 
+		//                     : '<span class="badge badge-secondary">Not Attending</span>';
+		                
+		//                 html += '<div class="komentar-item">';
+		//                 html += '<div class="komentar-header"><strong>' + msg.nama + '</strong> ' + badge + '</div>';
+		//                 if(msg.ucapan) {
+		//                     html += '<div class="komentar-body">' + msg.ucapan + '</div>';
+		//                 }
+		//                 html += '</div>';
+		//             });
+		            
+		//             if(html === '') {
+		//                 html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
+		//             }
+		            
+		//             $("#list-ucapan").html(html);
+		//         },
+		//         error: function() {
+		//             $("#list-ucapan").html('<p class="text-center text-muted">Unable to load messages.</p>');
+		//         }
+		//     });
+		// }
+
+		function loadMessages() {
+			$.ajax({
+				url: '/api/messages',
+				method: 'GET',
+				dataType: 'json',
+				success: function(messages) {
+					var html = '';
+
+					// Newest first, limit 10
+					messages.reverse().slice(0, 10).forEach(function(msg) {
+						var badge = msg.kehadiran === 'Hadir' 
 		                    ? '<span class="badge badge-success">Attending</span>' 
 		                    : '<span class="badge badge-secondary">Not Attending</span>';
-		                
-		                html += '<div class="komentar-item">';
-		                html += '<div class="komentar-header"><strong>' + msg.nama + '</strong> ' + badge + '</div>';
-		                if(msg.ucapan) {
-		                    html += '<div class="komentar-body">' + msg.ucapan + '</div>';
-		                }
-		                html += '</div>';
-		            });
-		            
-		            if(html === '') {
-		                html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
-		            }
-		            
-		            $("#list-ucapan").html(html);
-		        },
-		        error: function() {
-		            $("#list-ucapan").html('<p class="text-center text-muted">Unable to load messages.</p>');
-		        }
-		    });
+
+						html += '<div class="row_ucapan">';
+
+						if (msg.ucapan) {
+							html += '<div class="ucapan">' + msg.ucapan + '</div>';
+						}
+
+						html += '<div class="quote"></div>';
+
+						html += '<div class="nama">' + msg.nama + ' | ' + badge + '</div>';
+
+						html += '</div>';
+					});
+
+					if (html === '') {
+						html = '<p class="text-center">No messages yet. Be the first to RSVP!</p>';
+					}
+
+					$("#list-ucapan").html(
+						'<div class="col-md-12">' +
+							'<h2 class="section-title text-center cmt-5">' +
+								'Your Wishes' +
+							'</h2>' +
+							'<div class="scroll">' +
+								html +
+							'</div>' +
+						'</div>'
+					);
+				},
+				error: function() {
+					$("#list-ucapan").html(
+						'<p class="text-center text-muted">Unable to load messages.</p>'
+					);
+				}
+			});
 		}
 	</script>
 </head>
@@ -364,10 +414,34 @@
 					<button type="button" id="butsave" class="rsvp-form-submit js-submit" onclick="SubForm()">Send RSVP</button>
 					
         			<div class="row" id="kolom-ucapan">
-                        <div id="list-ucapan" class="list-komentar col-md-10 offset-md-1" data-aos="fade-up">
+                        <div id="list-ucapan" class="list-komentar col-md-10 offset-md-1 aos-init aos-animate" data-aos="fade-up">
                             <!-- Loaded from localStorage -->
                         </div>
         			</div>
+
+					<!-- <div class="row" id="kolom-ucapan">
+						<div
+							id="list-ucapan"
+							class="list-komentar col-md-10 offset-md-1 aos-init aos-animate"
+							data-aos="fade-up"
+						>
+							<div class="col-md-12">
+								<h2 class="section-title text-center cmt-5">
+									Your Wishes
+								</h2>
+
+								<div class="scroll">
+									<div class="row_ucapan">
+										<div class="ucapan">Welldone Pk Dedu👏❤️</div>
+										<div class="quote"></div>
+										<div class="nama">Bapak/Ibu Sankara Beach Nusa Penda</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> -->
+
+
 					<h2 class="section-title text-center cmt-5" data-aos="fade-up">Gallery</h2>
 				    
 					<div class=" grid" data-aos="fade-up" data-aos-delay="300">
