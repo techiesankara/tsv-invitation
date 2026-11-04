@@ -16,7 +16,7 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 	position: relative;
 	background-color: #FFFFFE;
-	color: #415064;
+	color: #58694A;
 }
 
 @media(min-width: 768px) {
@@ -338,7 +338,7 @@ a:focus {
 /* INTRO */
 .intro {
 	padding: 120px 10px 50px;
-    background-image: url(../img/modal-side.png);
+    background-image: url(../img/modal-side-tsv.png);
     background-repeat: repeat;
     background-size: contain;
 }
@@ -461,7 +461,7 @@ a:focus {
 }
 
 .counter-box {
-    background-color: #415064;
+    background-color: #58694A;
     border-radius: 8px;
     padding: 20px 0 10px;
     color: #FFF;
@@ -561,15 +561,15 @@ a:focus {
 .line{
     width:80px;
     height:1px;
-    background:#415064;
+    background:#58694A;
 }
 
 /* tengah */
 .date-center{
     text-align:center;
     padding:0 25px;
-    border-left:1px solid #415064;
-    border-right:1px solid #415064;
+    border-left:1px solid #58694A;
+    border-right:1px solid #58694A;
 }
 
 .month{
@@ -636,7 +636,7 @@ a:focus {
 
 .acara .btn-map {
     bottom: 0;
-    background-color: #415064;
+    background-color: #58694A;
     color: #fff;
     border: 0;
     font-size: 16px;
@@ -842,7 +842,7 @@ a:focus {
 .row_ucapan .ucapan {
     color: #FFF;
     margin: 0;
-    background: #415064;
+    background: #58694A;
     padding: 20px 24px;
     position: relative;
     border: none;
@@ -876,7 +876,7 @@ a:focus {
     height: 0;
     border-left: 0 solid transparent;
     border-right: 20px solid transparent;
-    border-top: 16px solid #415064;
+    border-top: 16px solid #58694A;
     margin: 0 0 0 40px;
     margin-bottom: 2px;
     padding: 0;
@@ -909,12 +909,12 @@ a:focus {
  
 /* Handle */
 .scroll::-webkit-scrollbar-thumb {
-  background: #415064; 
+  background: #58694A; 
 }
 
 /* Handle on hover */
 .scroll::-webkit-scrollbar-thumb:hover {
-  background: #415064; 
+  background: #58694A; 
 }
 
 /*Buku Tamu */
@@ -1060,7 +1060,7 @@ input[type="radio"]:checked + label::after{
 
 .rsvp-form-submit {
 	display: block;
-    background-color: #415064;
+    background-color: #58694A;
     color: #fff;
     border: 0;
     font-size: 16px;
@@ -1155,7 +1155,7 @@ footer .protokol-item p{
 
 .footer .icon {
 	margin: 0 -2px;
-	color: #415064; 
+	color: #58694A; 
 }
 
 .footer__social {
@@ -1184,7 +1184,7 @@ footer .protokol-item p{
     position: fixed;
     bottom: 14px;
     padding: 12px 14px 4px 14px;
-    background-color: #415064;
+    background-color: #58694A;
     right: 14px;
     color: #fff;
     font-size: 24px;
@@ -1207,7 +1207,7 @@ footer .protokol-item p{
 	right: 0;
 	width: 100%;
 	height: 100vh;
-	background-image: url(../img/modal-side.png);
+	background-image: url(../img/modal-side-tsv.png);
     background-repeat: repeat;
     background-size: cover;
 }
@@ -1333,7 +1333,7 @@ footer .protokol-item p{
 
 .btn-modal {
     bottom: 0;
-    background-color: #415064;
+    background-color: #58694A;
     color: #fff;
     border: 0;
     font-size: 16px;
@@ -1416,8 +1416,8 @@ footer .protokol-item p{
 }
 
 .btn-salin {
-	border: 1px solid #415064;
-	background-color: #415064;
+	border: 1px solid #58694A;
+	background-color: #58694A;
 	color: #fff;
 	padding: 7px 12px 6px;
     border: none;
@@ -1429,7 +1429,7 @@ footer .protokol-item p{
 }
 
 .btn-salin:hover {
-	background-color: #415064;
+	background-color: #58694A;
 }
 
 .btn-salin:focus {
@@ -1457,4 +1457,10 @@ footer .protokol-item p{
 	font-size: 11px;
 	padding: 8px 12px;
 	border-radius: 10px;
+}
+
+@media (max-width: 767px) {
+    .modal-dialog .overlay {
+        background-size: contain;
+    }
 }
